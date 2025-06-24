@@ -22,7 +22,7 @@
       position: relative;
       width: 90vw;
       max-width: 400px;
-      height: 500px;
+      aspect-ratio: 4/5;
       margin: 20px auto;
       border: 6px solid #ffcce5;
       border-radius: 20px;
@@ -33,10 +33,17 @@
 
     video, #overlay {
       position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
       border-radius: 20px;
+    }
+
+    #overlay {
+      z-index: 2;
+      pointer-events: none;
     }
 
     .buttons {
@@ -67,7 +74,7 @@
 </head>
 <body>
 
-  <h1>📸 K-pop Photo Booth</h1>
+  <h1>📸 Pose with JK or V!</h1>
 
   <div id="frame">
     <video id="video" autoplay muted playsinline></video>
@@ -88,7 +95,7 @@
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
 
-    // Start camera
+    // Start the camera
     navigator.mediaDevices.getUserMedia({ video: true })
       .then(stream => {
         video.srcObject = stream;
@@ -98,18 +105,16 @@
         console.error(err);
       });
 
-    // Change idol template
     function setOverlay(filename) {
       overlay.src = filename;
     }
 
-    // Capture image
     function takePhoto() {
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
       ctx.drawImage(overlay, 0, 0, canvas.width, canvas.height);
 
       const link = document.createElement('a');
-      link.download = 'kpop_booth_selfie.png';
+      link.download = 'kpop_selfie.png';
       link.href = canvas.toDataURL();
       link.click();
     }
